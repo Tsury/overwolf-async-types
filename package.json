@@ -1,13 +1,13 @@
 {
   "version": "0.0.1",
-  "name": "@tsury/overwolfAsyncTypes",
+  "name": "overwolf-async-types",
   "author": "Amit Tsur",
   "repository": "github:tsury/overwolfAsycTypes",
   "type": "module",
   "types": "./overwolf.d.ts",
   "module": "./promisify.js",
   "scripts": {
-    "build": "git submodule foreach \"git reset --hard head\" && node generateAsyncDefinitions.js",
+    "build": "git submodule update --init && git submodule foreach \"git reset --hard head\" && node generateAsyncDefinitions.js",
     "postinstall": "npm run build"
   },
   "dependencies": {
