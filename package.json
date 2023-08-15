@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "name": "@tsury/overwolfAsyncTypes",
+  "author": "Amit Tsur",
+  "repository": "github:tsury/overwolfAsycTypes",
+  "type": "module",
+  "types": "./overwolf.d.ts",
+  "module": "./promisify.js",
+  "scripts": {
+    "build": "git submodule foreach \"git reset --hard head\" && node generateAsyncDefinitions.js",
+    "postinstall": "npm run build"
+  },
+  "dependencies": {
+    "ts-morph": "^19.0.0"
+  }
+}
