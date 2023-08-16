@@ -218,13 +218,13 @@ export const promisify = () => {
     }
 
     const orgFunc = owObj[sourceFuncName];
-    const callbackIndex = nonLastCallbackFunc[funcName] || orgFunc.length - 1;
 
     // Wrap the function with a promise - use nonLastCallbackFunc to determine the callback index
     // Use nonCallbackFunctionCallbacks to determine if the callback is a function or arbitrary data
     owObj[targetFuncName] = async (...args) => new Promise((resolve, reject) => {
       try {
         const orgFuncArgs = [...args];
+        const callbackIndex = nonLastCallbackFunc[funcName] || args.length;
         orgFuncArgs.splice(callbackIndex, 0, (result) => {
           if (nonCallbackFunctionCallbacks[funcName]) {
             result.success ? resolve(result) : reject(new Error(result.error || 'Unknown error'));
