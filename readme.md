@@ -1,6 +1,6 @@
 # overwolf-async-types
 
-Async, typed wrapper for the [Overwolf API](https://github.com/overwolf/types).
+Async, typed real-time wrapper for the Overwolf API based on the [official type definitions](https://github.com/overwolf/types).
 
 ## Installation
 
@@ -56,7 +56,6 @@ npx generateOverwolfAsyncTypes
 
 - To prevent conflicts, make sure to remove Overwolf's types library (`@overwolf/types`). If you want a solution that uses `@overwolf/types` instead of fetching the files, make a PR.
 - Some Overwolf functions are readonly (e.g. `overwolf.io.dir`) - Those functions are kept intact, and new functions with an `Async` suffix are added (e.g. `overwolf.io.dirAsync`)
-- This solution only converts functions that have a last parameter with a name `callback` and type `CallbackFunction`. There are some rare cases of callbacks either appearing not as the last param, or not having the exact name `callback`. Those functions are left untouched. If you want to add functionaliy to support these rare cases, please make a PR.
 - Currently it seems that the official definitions file is not fully up-to-date with the actual API. If you find any discrepancies, open a PR on Overwolf's repo. I have contacted Overwolf and they are working on a way to generate the types out of their codebase to ensure coherence.
 - This repo was created to serve my needs - it's not guaranteed to work for you OOTB. If you encounter any issues, don't hesitate to either open an issue or create a PR. 
-- Currently I'm only traversing `overwolf.d.ts`, if you feel the need to traverse the other fiels, open an issue/PR.
+- Currently I'm only traversing `overwolf.d.ts`, if you feel the need to traverse the other files, open an issue/PR.
