@@ -18,7 +18,7 @@ npm install overwolf-async-types
 {
   "compilerOptions": {
     "types": [
-      "overwolf-async-types/index.d.ts"
+      "overwolf-async-types"
     ]
   }
 }
