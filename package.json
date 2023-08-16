@@ -4,7 +4,7 @@
   "author": "Amit Tsur",
   "repository": "github:tsury/overwolfAsycTypes",
   "type": "module",
-  "types": "./overwolf.d.ts",
+  "types": "index.d.ts",
   "module": "./promisify.js",
   "scripts": {
     "build": "npm run fetch && node generateAsyncDefinitions.js",

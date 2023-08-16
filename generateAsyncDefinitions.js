@@ -148,14 +148,14 @@ export const promisify = () => {
       return;
     }
 
-    const funcName = pathParts[pathParts.length - 1];
-    let targetFuncName = funcName;
+    const sourceFuncName = pathParts[pathParts.length - 1];
+    let targetFuncName = sourceFuncName;
 
     if (readOnlyFuncs.includes(funcName)) {
       // Add async suffix to read only functions
-      targetFuncName = funcName + 'Async';
+      targetFuncName = sourceFuncName + 'Async';
     } else {
-      var descriptor = Object.getOwnPropertyDescriptor(owObj, funcName);
+      var descriptor = Object.getOwnPropertyDescriptor(owObj, sourceFuncName);
   
       // Don't wrap if the function is not writable - should not happen
       if (!descriptor?.writable) {
@@ -163,11 +163,13 @@ export const promisify = () => {
       }
     }
 
+    const orgFunc = owObj[sourceFuncName];
+
     // Wrap the function with a promise
     owObj[targetFuncName] = async (...args) => new Promise((resolve, reject) => {
       try {
-        owObj[funcName](...args, (result) => {
-          result?.success ? resolve(result) : reject(new Error(result.error || 'Unknown error')));
+        orgFunc(...args, (result) => {
+          result?.success ? resolve(result) : reject(new Error(result.error || 'Unknown error'));
         });
       } catch (error) {
         reject(error);
