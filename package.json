@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.2",
   "name": "overwolf-async-types",
   "author": "Amit Tsur",
   "repository": "github:tsury/overwolfAsycTypes",
@@ -15,7 +15,7 @@
     "axios": "^1.4.0",
     "ts-morph": "^19.0.0"
   },
- "bin": {
+  "bin": {
     "generateOverwolfAsyncTypes": "./rebuild.cjs"
   }
 }
