@@ -2,16 +2,17 @@ import { Project } from "ts-morph";
 import fs from "fs";
 
 const project = new Project();
-const orgDefs = project.addSourceFileAtPath("overwolfTypes/overwolf.d.ts");
-
-// Delete org file to prevent conflicts.
-fs.unlink("overwolfTypes/overwolf.d.ts", (err) => {
-  if (err) {
-    throw err;
-  }
-});
+const orgDefs = project.addSourceFileAtPath("types/overwolf.d.ts");
 
 const convertedFuncs = new Set();
+
+// These functions are read only, until Overwolf changes them to be writable, we will create a new async function with the same name + "Async" suffix for them
+const readOnlyFuncs = [
+  "io.dir",
+  "io.readBinaryFile",
+  "io.readTextFile",
+  "io.exist",
+];
 
 let currNamespace = "";
 let fullFunctionName = "";
@@ -22,7 +23,10 @@ orgDefs.getStatements().forEach((statement) => {
     return;
   }
 
+  // Omit the "overwolf." prefix
   currNamespace = statement.getName().replace("overwolf.", "");
+
+  const functionsToAdd = [];
 
   statement.forEachDescendant((functionDeclaration) => {
     // Go over every function declaration
@@ -35,8 +39,8 @@ orgDefs.getStatements().forEach((statement) => {
     const params = functionDeclaration.getParameters();
     const lastParam = params[params.length - 1];
 
-    if (!lastParam) {
-      // No last param - no need to convert
+    if (lastParam?.getName() !== "callback") {
+      // No last param, or last param name not 'callback' - no need to convert
       return;
     }
 
@@ -51,32 +55,86 @@ orgDefs.getStatements().forEach((statement) => {
     const match = typeText.match(/CallbackFunction<(.+)>/);
 
     if (match && match[1]) {
-      // Remove callback param
-      lastParam.remove();
+      let newAsyncFunction = functionDeclaration;
 
-      // Set return value as a promise with the existing generic type
-      functionDeclaration.setReturnType(`Promise<${match[1]}>`);
+      if (readOnlyFuncs.includes(fullFunctionName)) {
+        // In case of a read only function, we create a new function with the same name with an "async" suffix
+        const newFunctionName = functionDeclaration.getName() + "Async";
 
-      convertedFuncs.add(fullFunctionName);
+        // Clone the function declaration, omitting the last param and changing return type to be a promise
+        newAsyncFunction = {
+          name: newFunctionName,
+          parameters: params.slice(0, -1).map((p) => ({
+            name: p.getName(),
+            type: p.getTypeNode()?.getText() || "any",
+          })),
+          returnType: `Promise<${match[1]}>`,
+          docs: functionDeclaration
+            .getJsDocs()
+            .map((jsDoc) => jsDoc.getStructure()),
+        };
+
+        // Change the last param tag to be a return tag
+        newAsyncFunction.docs.forEach((jsDoc) => {
+          const lastParamTag = jsDoc.tags[jsDoc.tags.length - 1];
+          lastParamTag.tagName = "returns";
+          lastParamTag.text = `{Promise} A promise that wraps [${
+            lastParamTag.text || "callback doc is missing"
+          }].`;
+        });
+
+        // Will be added to the namespace later to avoid changing the iteration
+        functionsToAdd.push(newAsyncFunction);
+      } else {
+        // Remove callback param
+        lastParam.remove();
+
+        // Set return value as a promise with the existing generic type
+        functionDeclaration.setReturnType(`Promise<${match[1]}>`);
+
+        const jsDocs = newAsyncFunction.getJsDocs();
+
+        // Change the last param tag to be a return tag
+        jsDocs.forEach((jsDoc) => {
+          const paramTags = jsDoc.getTags();
+          const lastParamTag = paramTags[paramTags.length - 1];
+
+          if (lastParamTag?.getName() === "callback") {
+            const lastParamTagComment = lastParamTag.getComment();
+
+            lastParamTag.remove();
+
+            jsDoc.addTag({
+              tagName: "returns",
+              text: `{Promise} A promise that wraps [${
+                lastParamTagComment || "callback doc is missing"
+              }].`,
+            });
+          }
+        });
+
+        convertedFuncs.add(fullFunctionName);
+      }
     }
+  });
+
+  functionsToAdd.forEach((func) => {
+    statement.addFunction(func);
   });
 });
 
-const newFile = project.createSourceFile(
-  "overwolf.d.ts",
-  orgDefs.getFullText(),
-  {
-    overwrite: true,
-  }
-);
-
-newFile.saveSync();
+orgDefs.saveSync();
 
 const promisifyCode = `
-const convertedFuncs = ${JSON.stringify(Array.from(convertedFuncs))};
+const readOnlyFuncs = ${JSON.stringify(readOnlyFuncs)};
+
+const asyncFuncs = ${JSON.stringify([
+  ...Array.from(convertedFuncs),
+  ...readOnlyFuncs,
+])};
 
 export const promisify = () => {
-  convertedFuncs.forEach((funcName) => {
+  asyncFuncs.forEach((funcName) => {
     const pathParts = funcName.split('.');
     let owObj = overwolf;
 
@@ -91,16 +149,22 @@ export const promisify = () => {
     }
 
     const funcName = pathParts[pathParts.length - 1];
+    let targetFuncName = funcName;
 
-    var descriptor = Object.getOwnPropertyDescriptor(owObj, funcName);
+    if (readOnlyFuncs.includes(funcName)) {
+      // Add async suffix to read only functions
+      targetFuncName = funcName + 'Async';
+    } else {
+      var descriptor = Object.getOwnPropertyDescriptor(owObj, funcName);
   
-    // Don't wrap if the function is not writable
-    if (!descriptor?.writable) {
-      return;
+      // Don't wrap if the function is not writable - should not happen
+      if (!descriptor?.writable) {
+        return;
+      }
     }
 
     // Wrap the function with a promise
-    owObj[funcName] = async (...args) => new Promise((resolve, reject) => {
+    owObj[targetFuncName] = async (...args) => new Promise((resolve, reject) => {
       try {
         owObj[funcName](...args, (result) => {
           result?.success ? resolve(result) : reject(new Error(result.error || 'Unknown error')));

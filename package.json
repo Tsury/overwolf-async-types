@@ -7,10 +7,12 @@
   "types": "./overwolf.d.ts",
   "module": "./promisify.js",
   "scripts": {
-    "build": "git submodule update --init && git submodule foreach \"git reset --hard head\" && node generateAsyncDefinitions.js",
+    "build": "npm run fetch && node generateAsyncDefinitions.js",
+    "fetch": "node fetchFiles.cjs",
     "postinstall": "npm run build"
   },
   "dependencies": {
+    "axios": "^1.4.0",
     "ts-morph": "^19.0.0"
   }
 }
