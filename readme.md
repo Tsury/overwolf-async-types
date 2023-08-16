@@ -10,7 +10,7 @@ To install, run:
 npm install overwolf-async-types
 ```
 
-Bear in mind that this will take a while as the new type definition is generated upon installation.
+Bear in mind that this will take a while as the new type definitions are generated upon installation.
 
 ## Usage
 
