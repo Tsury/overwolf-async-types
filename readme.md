@@ -54,6 +54,7 @@ npx generateOverwolfAsyncTypes
 
 ## Notes
 
+- After installing/updating/rebuilding, restart your IDE/Typescript Server/ESLint Server to ensure you're working with the newly built definitions.
 - To prevent conflicts, make sure to remove Overwolf's types library (`@overwolf/types`). If you want a solution that uses `@overwolf/types` instead of fetching the files, make a PR.
 - Some Overwolf functions are readonly (e.g. `overwolf.io.dir`) - Those functions are kept intact, and new functions with an `Async` suffix are added (e.g. `overwolf.io.dirAsync`)
 - Currently it seems that the official definitions file is not fully up-to-date with the actual API. If you find any discrepancies, open a PR on Overwolf's repo. I have contacted Overwolf and they are working on a way to generate the types out of their codebase to ensure coherence.
