@@ -227,9 +227,9 @@ export const promisify = () => {
         const callbackIndex = nonLastCallbackFunc[funcName] || args.length;
         orgFuncArgs.splice(callbackIndex, 0, (result) => {
           if (nonCallbackFunctionCallbacks[funcName]) {
-            result.success ? resolve(result) : reject(new Error(result.error || 'Unknown error'));
-          } else {
             resolve(result); // Handle arbitrary data
+          } else {
+            result.success ? resolve(result) : reject(new Error(result.error || 'Unknown error'));
           }
         });
         orgFunc(...orgFuncArgs);
