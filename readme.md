@@ -50,7 +50,7 @@ npx generateOverwolfAsyncTypes
 
 1. Fetches the latest d.ts files from Overwolf's repo
 2. Iterates over the types inside `overwolf.d.ts` and updates them to use Promises, also updates JSDoc accordingly.
-3. Generates promisify code into `promisify.js` - this code traverses the Overwolf API during runtime and wraps relevant functions in a Promise.
+3. Generates promisify code into `promisify.js` - this code traverses the Overwolf API during runtime and wraps relevant functions in a Promise. It also changes all const enums into regular enums to increase compatibility.
 
 ## Notes
 

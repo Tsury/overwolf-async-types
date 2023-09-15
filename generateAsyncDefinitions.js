@@ -38,6 +38,16 @@ orgDefs.getStatements().forEach((statement) => {
   const functionsToAdd = [];
 
   statement.forEachDescendant((functionDeclaration) => {
+    // Go over every enum declaration
+    if (functionDeclaration.getKindName() === "EnumDeclaration") {
+      // Remove the "const" modifier from the enum
+      if (functionDeclaration.getStructure().isConst) {
+        functionDeclaration.removeModifier("const");
+      }
+
+      return;
+    }
+
     // Go over every function declaration
     if (functionDeclaration.getKindName() !== "FunctionDeclaration") {
       return;
