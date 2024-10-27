@@ -1,10 +1,53 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 
 const owner = 'overwolf';
 const repo = 'types';
 
+// Function to fetch PR diff from GitHub and apply as a patch
+async function applyPrDiff(filePath, prUrl) {
+  try {
+    const diffUrl = `${prUrl}.diff`;
+    const response = await axios.get(diffUrl);
+    const patchContent = response.data;
+
+    const patchProcess = exec(`patch "${filePath}"`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error applying PR ${prUrl} to ${filePath}:`, stderr);
+      } else {
+        console.log(`Applied PR ${prUrl} to ${filePath} successfully.`);
+      }
+    });
+
+    patchProcess.stdin.write(patchContent);
+    patchProcess.stdin.end();
+  } catch (error) {
+    console.error(`Failed to fetch PR diff from ${prUrl}:`, error);
+  }
+}
+
+// Function to read PR URLs from a patch file if it exists
+function applyPatchesFromPrFile(filePath) {
+  const patchFile = path.join(__dirname, 'patches', path.basename(filePath));
+
+  // Check if the patch file exists
+  if (fs.existsSync(patchFile)) {
+    fs.readFile(patchFile, 'utf-8', (err, data) => {
+      if (err) {
+        console.error(`Failed to read patch file ${patchFile}:`, err);
+        return;
+      }
+
+      // Each line in the file is a URL to a PR
+      const prUrls = data.split('\n').map(line => line.trim()).filter(Boolean);
+      prUrls.forEach(prUrl => applyPrDiff(filePath, prUrl));
+    });
+  }
+}
+
+// Function to fetch files from the GitHub repository
 function fetchFiles(url, dir) {
   axios.get(url)
     .then(response => {
@@ -16,7 +59,11 @@ function fetchFiles(url, dir) {
             .then(fileResponse => {
               fs.promises.mkdir(dir, { recursive: true })
                 .then(() => {
-                  fs.writeFileSync(path.join(dir, file.name), fileResponse.data);
+                  const filePath = path.join(dir, file.name);
+                  fs.writeFileSync(filePath, fileResponse.data);
+
+                  // Apply patches from PR file if it exists
+                  applyPatchesFromPrFile(filePath);
                 });
             });
         }
