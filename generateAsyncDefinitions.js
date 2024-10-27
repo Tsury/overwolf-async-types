@@ -136,11 +136,11 @@ orgDefs.getStatements().forEach((statement) => {
           .map((jsDoc) => jsDoc.getStructure()),
       };
 
-      // Change the callback param tag to be a return tag
+      // Change the callback param tag to be a return tag with specific Promise type
       newAsyncFunction.docs.forEach((jsDoc) => {
         const callbackParamTag = jsDoc.tags[jsDoc.tags.length - 1];
         callbackParamTag.tagName = "returns";
-        callbackParamTag.text = `{Promise} A promise that wraps [${
+        callbackParamTag.text = `{Promise<${returnPromiseType}>} A promise that wraps [${
           callbackParamTag.text || "callback doc is missing"
         }].`;
       });
@@ -156,7 +156,7 @@ orgDefs.getStatements().forEach((statement) => {
 
       const jsDocs = newAsyncFunction.getJsDocs();
 
-      // Change the callback param tag to be a return tag
+      // Change the callback param tag to be a return tag with specific Promise type
       jsDocs.forEach((jsDoc) => {
         const paramTags = jsDoc.getTags();
         const callbackParamTag = paramTags[paramTags.length - 1];
@@ -168,7 +168,7 @@ orgDefs.getStatements().forEach((statement) => {
 
           jsDoc.addTag({
             tagName: "returns",
-            text: `{Promise} A promise that wraps [${
+            text: `{Promise<${returnPromiseType}>} A promise that wraps [${
               lastParamTagComment || "callback doc is missing"
             }].`,
           });
