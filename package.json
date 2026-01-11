@@ -2,7 +2,10 @@
   "version": "0.0.12",
   "name": "overwolf-async-types",
   "author": "Amit Tsur",
-  "repository": "github:tsury/overwolfAsycTypes",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsury/overwolf-async-types.git"
+  },
   "type": "module",
   "types": "index.d.ts",
   "module": "./promisify.js",
