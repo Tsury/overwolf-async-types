@@ -17,5 +17,8 @@
   },
   "bin": {
     "generateOverwolfAsyncTypes": "./rebuild.cjs"
+  },
+  "devDependencies": {
+    "diff": "^8.0.2"
   }
 }

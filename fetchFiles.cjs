@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
+const Diff = require('diff');
 
 const owner = 'overwolf';
 const repo = 'types';
@@ -13,16 +13,15 @@ async function applyPrDiff(filePath, prUrl) {
     const response = await axios.get(diffUrl);
     const patchContent = response.data;
 
-    const patchProcess = exec(`patch "${filePath}"`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error applying PR ${prUrl} to ${filePath}:`, stderr);
-      } else {
-        console.log(`Applied PR ${prUrl} to ${filePath} successfully.`);
-      }
-    });
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const patchedContent = Diff.applyPatch(fileContent, patchContent);
 
-    patchProcess.stdin.write(patchContent);
-    patchProcess.stdin.end();
+    if (patchedContent === false) {
+      console.error(`Error applying PR ${prUrl} to ${filePath}: Patch application failed.`);
+    } else {
+      fs.writeFileSync(filePath, patchedContent);
+      console.log(`Applied PR ${prUrl} to ${filePath} successfully.`);
+    }
   } catch (error) {
     console.error(`Failed to fetch PR diff from ${prUrl}:`, error);
   }
