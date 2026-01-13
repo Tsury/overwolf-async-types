@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Tsury/overwolf-async-types/compare/v1.0.0...v1.0.1) (2026-01-13)
+
+
+### Bug Fixes
+
+* re-trigger release with [secure] token ([3badb2b](https://github.com/Tsury/overwolf-async-types/commit/3badb2b341cc51f9a0e06c3699ccd01bf0be73fa))
+
 # 1.0.0 (2026-01-13)
 
 
