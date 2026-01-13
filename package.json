@@ -4,7 +4,7 @@
   "author": "Amit Tsur",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tsury/overwolf-async-types.git"
+    "url": "git+https://github.com/Tsury/overwolf-async-types.git"
   },
   "type": "module",
   "types": "index.d.ts",

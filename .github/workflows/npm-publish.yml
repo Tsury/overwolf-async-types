@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+          scope: "@Tsury" # Attempting to force scope, though this package is unscoped.
+                          # Actually, wait. The package name is 'overwolf-async-types', NO scope.
+                          # The 404 might be because we are not authenticated correctly.
 
       - name: Configure Git
         run: |
