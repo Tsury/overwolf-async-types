@@ -57,9 +57,9 @@
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       [
-        "@semantic-release/npm",
+        "@semantic-release/exec",
         {
-          "provenance": true
+          "publishCmd": "npm publish --provenance"
         }
       ],
       "@semantic-release/github",
