@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/Tsury/overwolf-async-types/compare/v1.0.2...v1.0.3) (2026-01-13)
+
+
+### Bug Fixes
+
+* re-trigger release with .npmrc setup ([7352c3e](https://github.com/Tsury/overwolf-async-types/commit/7352c3e44ba54aa3aef3516d598c124b366ec26f))
+
 ## [1.0.2](https://github.com/Tsury/overwolf-async-types/compare/v1.0.1...v1.0.2) (2026-01-13)
 
 
