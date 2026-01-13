@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/Tsury/overwolf-async-types/compare/v1.1.0...v1.1.1) (2026-01-13)
+
+
+### Bug Fixes
+
+* remove unused conventionalcommits preset dep ([d89f658](https://github.com/Tsury/overwolf-async-types/commit/d89f658fcf23b03949ad4b387df73970d3291c29))
+
 # [1.1.0](https://github.com/Tsury/overwolf-async-types/compare/v1.0.7...v1.1.0) (2026-01-13)
 
 
