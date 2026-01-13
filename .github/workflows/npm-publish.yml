@@ -39,7 +39,7 @@ jobs:
 
       - run: npm ci
 
-      - run: npm publish --access public
+      - run: npm publish --access public --no-provenance
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
