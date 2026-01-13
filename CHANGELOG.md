@@ -1,3 +1,11 @@
+## [1.0.4](https://github.com/Tsury/overwolf-async-types/compare/v1.0.3...v1.0.4) (2026-01-13)
+
+
+### Bug Fixes
+
+* **ci:** publish via npm trusted publishing (OIDC) ([2cce41b](https://github.com/Tsury/overwolf-async-types/commit/2cce41b611269fd578b63709b0e6134076b23268))
+* re-trigger release with .npmrc file ([ac5e223](https://github.com/Tsury/overwolf-async-types/commit/ac5e223fd3f476d2f01f473eb91dfed0a091aad2))
+
 ## [1.0.3](https://github.com/Tsury/overwolf-async-types/compare/v1.0.2...v1.0.3) (2026-01-13)
 
 
