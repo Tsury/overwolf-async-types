@@ -1,3 +1,11 @@
+## [1.0.7](https://github.com/Tsury/overwolf-async-types/compare/v1.0.6...v1.0.7) (2026-01-13)
+
+
+### Bug Fixes
+
+* **ci:** don't gate on npm whoami ([c2897a6](https://github.com/Tsury/overwolf-async-types/commit/c2897a6c2d2afe3419ffb7aa5caff1c0eb140657))
+* **ci:** wire exchanged OIDC token into npm config ([cc412f5](https://github.com/Tsury/overwolf-async-types/commit/cc412f5a5b1bf3007fe2d3f87d89d764d3677662))
+
 ## [1.0.6](https://github.com/Tsury/overwolf-async-types/compare/v1.0.5...v1.0.6) (2026-01-13)
 
 
