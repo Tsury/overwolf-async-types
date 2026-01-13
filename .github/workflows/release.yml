@@ -31,6 +31,33 @@ jobs:
         run: |
           node -e "if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL) { console.error('Missing ACTIONS_ID_TOKEN_REQUEST_URL (need permissions id-token:write)'); process.exit(1); } console.log('OIDC env detected');"
 
+      - name: Exchange GitHub OIDC for npm token
+        env:
+          PACKAGE_NAME: overwolf-async-types
+        run: |
+          set -euo pipefail
+
+          if [ -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ] || [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ]; then
+            echo "Missing ACTIONS_ID_TOKEN_REQUEST_TOKEN/URL (need permissions: id-token: write)" >&2
+            exit 1
+          fi
+
+          URL="$ACTIONS_ID_TOKEN_REQUEST_URL"
+          if [[ "$URL" == *\?* ]]; then
+            URL="$URL&audience=npm:registry.npmjs.org"
+          else
+            URL="$URL?audience=npm:registry.npmjs.org"
+          fi
+
+          OIDC_JSON=$(curl -fsSL -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$URL")
+          OIDC_TOKEN=$(node -e "const fs=require('fs'); const j=JSON.parse(fs.readFileSync(0,'utf8')); if(!j.value) process.exit(2); process.stdout.write(j.value);" <<< "$OIDC_JSON")
+
+          EXCHANGE_URL="https://registry.npmjs.org/-/npm/v1/oidc/token/exchange/package/${PACKAGE_NAME}"
+          NPM_JSON=$(curl -fsSL -X POST -H "Authorization: Bearer $OIDC_TOKEN" "$EXCHANGE_URL")
+          NPM_TOKEN=$(node -e "const fs=require('fs'); const j=JSON.parse(fs.readFileSync(0,'utf8')); if(!j.token) process.exit(3); process.stdout.write(j.token);" <<< "$NPM_JSON")
+
+          echo "NODE_AUTH_TOKEN=$NPM_TOKEN" >> "$GITHUB_ENV"
+
       - name: Install dependencies
         env:
           NPM_CONFIG_USERCONFIG: ${{ github.workspace }}/.npmrc
@@ -45,5 +72,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_USERCONFIG: ${{ github.workspace }}/.npmrc
-          NODE_AUTH_TOKEN: ""
         run: npx semantic-release

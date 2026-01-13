@@ -62,7 +62,7 @@
       [
         "@semantic-release/exec",
         {
-          "publishCmd": "npm publish --access public"
+          "publishCmd": "npm publish --provenance --access public"
         }
       ],
       "@semantic-release/github",
