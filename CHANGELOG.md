@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/Tsury/overwolf-async-types/compare/v1.0.5...v1.0.6) (2026-01-13)
+
+
+### Bug Fixes
+
+* **ci:** exchange OIDC token for npm publish ([3a29bd8](https://github.com/Tsury/overwolf-async-types/commit/3a29bd81115ccc3202c35934937613342cb3d385))
+
 ## [1.0.5](https://github.com/Tsury/overwolf-async-types/compare/v1.0.4...v1.0.5) (2026-01-13)
 
 
