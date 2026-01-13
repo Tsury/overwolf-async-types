@@ -46,6 +46,10 @@ const res = await overwolf.windows.obtainDeclaredWindow('main');
 npx generate-overwolf-async-types
 ```
 
+## Releases
+
+This package is published from GitHub Actions using npm Trusted Publishing (OIDC) with provenance enabled.
+
 ## How Does It Work
 
 1. Fetches the latest d.ts files from Overwolf's repo
