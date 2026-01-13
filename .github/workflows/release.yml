@@ -28,7 +28,8 @@ jobs:
           cache: "npm"
 
       - name: Assert OIDC available
-        run: node -e "if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL) { console.error('Missing ACTIONS_ID_TOKEN_REQUEST_URL (need permissions: id-token: write)'); process.exit(1); } console.log('OIDC env detected');"
+        run: |
+          node -e "if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL) { console.error('Missing ACTIONS_ID_TOKEN_REQUEST_URL (need permissions id-token:write)'); process.exit(1); } console.log('OIDC env detected');"
 
       - name: Install dependencies
         env:
