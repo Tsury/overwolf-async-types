@@ -27,10 +27,6 @@ jobs:
           node-version: "lts/*"
           cache: "npm"
 
-      - name: Assert OIDC available
-        run: |
-          node -e "if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL) { console.error('Missing ACTIONS_ID_TOKEN_REQUEST_URL (need permissions id-token:write)'); process.exit(1); } console.log('OIDC env detected');"
-
       - name: Exchange GitHub OIDC for npm token
         env:
           PACKAGE_NAME: overwolf-async-types
@@ -42,11 +38,13 @@ jobs:
             exit 1
           fi
 
+          AUDIENCE="npm:registry.npmjs.org"
+
           URL="$ACTIONS_ID_TOKEN_REQUEST_URL"
           if [[ "$URL" == *\?* ]]; then
-            URL="$URL&audience=npm:registry.npmjs.org"
+            URL="$URL&audience=$AUDIENCE"
           else
-            URL="$URL?audience=npm:registry.npmjs.org"
+            URL="$URL?audience=$AUDIENCE"
           fi
 
           OIDC_JSON=$(curl -fsSL -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$URL")
@@ -56,19 +54,19 @@ jobs:
           NPM_JSON=$(curl -fsSL -X POST -H "Authorization: Bearer $OIDC_TOKEN" "$EXCHANGE_URL")
           NPM_TOKEN=$(node -e "const fs=require('fs'); const j=JSON.parse(fs.readFileSync(0,'utf8')); if(!j.token) process.exit(3); process.stdout.write(j.token);" <<< "$NPM_JSON")
 
-          echo "NODE_AUTH_TOKEN=$NPM_TOKEN" >> "$GITHUB_ENV"
-
           NPMRC_PATH="$RUNNER_TEMP/npmrc"
           {
             echo "registry=https://registry.npmjs.org/"
             echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
           } > "$NPMRC_PATH"
+          chmod 0600 "$NPMRC_PATH"
           echo "NPM_CONFIG_USERCONFIG=$NPMRC_PATH" >> "$GITHUB_ENV"
 
       - name: Verify npm config
         run: |
           set -euo pipefail
-          npm config get userconfig
+          echo "Using npm userconfig: $(npm config get userconfig)"
+          echo "Using npm registry: $(npm config get registry)"
           if ! grep -q "_authToken=" "$NPM_CONFIG_USERCONFIG"; then
             echo "Expected auth token in $NPM_CONFIG_USERCONFIG" >&2
             exit 1
