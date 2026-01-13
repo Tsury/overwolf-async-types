@@ -35,7 +35,8 @@
       [
         "@semantic-release/npm",
         {
-          "provenance": true
+          "provenance": true,
+          "verifyConditions": false
         }
       ],
       "@semantic-release/github",
