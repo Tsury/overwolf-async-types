@@ -19,7 +19,7 @@
     "ts-morph": "^19.0.0"
   },
   "bin": {
-    "generate-overwolf-async-types": "./rebuild.cjs"
+    "generate-overwolf-async-types": "rebuild.cjs"
   },
   "devDependencies": {
     "diff": "^8.0.2",
@@ -62,7 +62,7 @@
       [
         "@semantic-release/exec",
         {
-          "publishCmd": "npm publish --provenance --access public"
+          "publishCmd": "npm publish --access public"
         }
       ],
       "@semantic-release/github",
