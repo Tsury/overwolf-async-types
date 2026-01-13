@@ -19,16 +19,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Debug Repository Name
-        run: echo "Repository is $GITHUB_REPOSITORY"
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-          scope: "@Tsury" # Attempting to force scope, though this package is unscoped.
-                          # Actually, wait. The package name is 'overwolf-async-types', NO scope.
-                          # The 404 might be because we are not authenticated correctly.
 
       - name: Configure Git
         run: |
@@ -45,7 +39,7 @@ jobs:
 
       - run: npm ci
 
-      - run: npm publish --provenance --access public
+      - run: npm publish --access public
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
