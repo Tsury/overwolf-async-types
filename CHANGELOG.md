@@ -1,3 +1,11 @@
+## [1.0.5](https://github.com/Tsury/overwolf-async-types/compare/v1.0.4...v1.0.5) (2026-01-13)
+
+
+### Bug Fixes
+
+* **ci:** fix release workflow yaml ([ebc8750](https://github.com/Tsury/overwolf-async-types/commit/ebc87501aeaf51377236bf2f08c365353da2acfe))
+* **ci:** use OIDC trusted publishing ([2fa7e59](https://github.com/Tsury/overwolf-async-types/commit/2fa7e590c511d470e230f718b53f288feb284a36))
+
 ## [1.0.4](https://github.com/Tsury/overwolf-async-types/compare/v1.0.3...v1.0.4) (2026-01-13)
 
 
