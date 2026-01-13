@@ -2,7 +2,10 @@
   "version": "1.0.3",
   "name": "overwolf-async-types",
   "author": "Amit Tsur",
-  "repository": "github:Tsury/overwolf-async-types",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tsury/overwolf-async-types.git"
+  },
   "type": "module",
   "types": "index.d.ts",
   "module": "./promisify.js",
@@ -16,7 +19,7 @@
     "ts-morph": "^19.0.0"
   },
   "bin": {
-    "generateOverwolfAsyncTypes": "./rebuild.cjs"
+    "generate-overwolf-async-types": "./rebuild.cjs"
   },
   "devDependencies": {
     "diff": "^8.0.2",

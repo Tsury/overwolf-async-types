@@ -43,7 +43,7 @@ const res = await overwolf.windows.obtainDeclaredWindow('main');
 4. (optional) Refetch and rebuild definitions:
 
 ```bash
-npx generateOverwolfAsyncTypes
+npx generate-overwolf-async-types
 ```
 
 ## How Does It Work
