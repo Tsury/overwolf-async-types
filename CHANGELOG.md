@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/Tsury/overwolf-async-types/compare/v1.1.1...v1.1.2) (2026-06-28)
+
+
+### Bug Fixes
+
+* declare diff runtime dependency ([662723a](https://github.com/Tsury/overwolf-async-types/commit/662723ab4c2d51c3adaa5b034e7c1d412222e1d9))
+
 ## [1.1.1](https://github.com/Tsury/overwolf-async-types/compare/v1.1.0...v1.1.1) (2026-01-13)
 
 
