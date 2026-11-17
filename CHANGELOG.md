@@ -1,3 +1,9 @@
+## [1.1.3](https://github.com/Tsury/overwolf-async-types/compare/v1.1.2...v1.1.3) (2026-11-17)
+
+### Bug Fixes
+
+* **deps:** upgrade generator and release dependencies ([c485981](https://github.com/Tsury/overwolf-async-types/commit/c48598146322124a8048a73c419b3b1dd7f536ff))
+
 ## [1.1.2](https://github.com/Tsury/overwolf-async-types/compare/v1.1.1...v1.1.2) (2026-06-28)
 
 
